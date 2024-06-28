@@ -5,6 +5,8 @@ import contentDisposition from 'content-disposition'
 import { InternalFlowiseError } from '../../errors/internalFlowiseError'
 import { StatusCodes } from 'http-status-codes'
 import { streamStorageFile } from 'flowise-components'
+import OpenAI from 'openai'
+import * as path from 'path';
 
 // List available assistants
 const getAllOpenaiAssistants = async (req: Request, res: Response, next: NextFunction) => {
@@ -95,9 +97,34 @@ const uploadAssistantFiles = async (req: Request, res: Response, next: NextFunct
     }
 }
 
+const generateTranscription = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const file = req.file
+        if (!file) {
+            return res.status(400).send('No file uploaded.')
+        }
+        const openai = new OpenAI({
+            apiKey: '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'
+        })
+        const filePath = path.join(__dirname, file.path)
+        const transcriptionObject: any = {
+            file: fs.createReadStream(filePath),
+            model: 'whisper-1',
+            // json, text, srt, verbose_json, or vtt
+            response_format: 'text'
+        }
+        const transcription = await openai.audio.transcriptions.create(transcriptionObject)
+        fs.unlinkSync(filePath)
+        return res.json({ transcription })
+    } catch (error) {
+        next(error)
+    }
+}
+
 export default {
     getAllOpenaiAssistants,
     getSingleOpenaiAssistant,
     getFileFromAssistant,
-    uploadAssistantFiles
+    uploadAssistantFiles,
+    generateTranscription
 }
