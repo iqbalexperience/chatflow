@@ -104,7 +104,7 @@ const generateTranscription = async (req: Request, res: Response, next: NextFunc
             return res.status(400).send('No file uploaded.')
         }
         const openai = new OpenAI({
-            apiKey: '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'
+            apiKey: 'sk-proj-JHlErtlJfJD0U9vcseimT3BlbkFJ02FgA7ZMKGfMMkrXmN0i'
         })
         const filePath = path.join(file.path)
         const transcriptionObject: any = {
