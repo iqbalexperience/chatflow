@@ -117,6 +117,11 @@ const generateTranscription = async (req: Request, res: Response, next: NextFunc
         fs.unlinkSync(filePath)
         return res.json({ transcription })
     } catch (error) {
+        const file = req.file
+        if (file) {
+            const filePath = path.join(file.path)
+            fs.unlinkSync(filePath)
+        }
         next(error)
     }
 }
