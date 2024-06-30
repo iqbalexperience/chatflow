@@ -39,7 +39,7 @@ const getSingleOpenaiAssistant = async (req: Request, res: Response, next: NextF
                 `Error: openaiAssistantsController.getSingleOpenaiAssistant - credential not provided!`
             )
         }
-        const apiResponse = await openaiAssistantsService.getSingleOpenaiAssistant(req.query.credential as string, req.params.id)
+        const apiResponse = await openaiAssistantsService.getSingleOpenaiAssistant(req.query.credential as string, req.pa.ramsid)
         return res.json(apiResponse)
     } catch (error) {
         next(error)
@@ -104,7 +104,7 @@ const generateTranscription = async (req: Request, res: Response, next: NextFunc
             return res.status(400).send('No file uploaded.')
         }
         const openai = new OpenAI({
-            apiKey: 'sk-proj-JHlErtlJfJD0U9vcseimT3BlbkFJ02FgA7ZMKGfMMkrXmN0i'
+            apiKey: (process.env.TRANSCRIPTION_API_KEY as string) || ''
         })
         const filePath = path.join(file.path)
         const transcriptionObject: any = {
