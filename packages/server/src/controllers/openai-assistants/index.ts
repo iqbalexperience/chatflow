@@ -6,7 +6,7 @@ import { InternalFlowiseError } from '../../errors/internalFlowiseError'
 import { StatusCodes } from 'http-status-codes'
 import { streamStorageFile } from 'flowise-components'
 import OpenAI from 'openai'
-import * as path from 'path';
+import * as path from 'path'
 
 // List available assistants
 const getAllOpenaiAssistants = async (req: Request, res: Response, next: NextFunction) => {
@@ -106,7 +106,7 @@ const generateTranscription = async (req: Request, res: Response, next: NextFunc
         const openai = new OpenAI({
             apiKey: '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'
         })
-        const filePath = path.join(__dirname, file.path)
+        const filePath = path.join(file.path)
         const transcriptionObject: any = {
             file: fs.createReadStream(filePath),
             model: 'whisper-1',
